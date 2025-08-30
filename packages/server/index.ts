@@ -1,6 +1,6 @@
-import express from 'express'
+import express from 'express';
 import type { Request, Response } from 'express';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -12,9 +12,9 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get('/api/hello', (req: Request, res: Response) => {
-  res.send({message: 'Hello from API!'});
+  res.send({ message: 'Hello from API!' });
 });
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-})
+  console.log(`Server is running at http://localhost:${port}`);
+});
