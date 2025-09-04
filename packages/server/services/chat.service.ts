@@ -1,14 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import OpenAI from 'openai';
 import { conversationRepository } from '../repositories/conversations.repository';
 import template from '../prompts/chatbot.txt';
 import { llmClient } from '../llm/client';
-
-// Implementation detail
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 const parkInfo = fs.readFileSync(
   path.join(__dirname, '..', 'prompts', 'WonderWorld.md'),
