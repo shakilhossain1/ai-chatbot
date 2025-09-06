@@ -4,6 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '../ui/button';
 import { HiSparkles } from 'react-icons/hi2';
+import { useState } from 'react';
 
 type Props = {
   productId: number;
@@ -22,7 +23,11 @@ type GetReviewResponse = {
   reviews: Review[];
 };
 
+type SummarizeResponse = { summary: string };
+
 const ReviewList = ({ productId }: Props) => {
+  const [summary, setSummary] = useState('');
+
   const {
     data: reviewData,
     error,
@@ -31,6 +36,13 @@ const ReviewList = ({ productId }: Props) => {
     queryKey: ['reviews', productId],
     queryFn: () => fetchReviews(),
   });
+
+  const handleSummarize = async () => {
+    const { data } = await axios.post<SummarizeResponse>(
+      `/api/products/${productId}/reviews/summarize`
+    );
+    setSummary(data.summary);
+  };
 
   const fetchReviews = async () => {
     const { data } = await axios.get<GetReviewResponse>(
@@ -61,13 +73,15 @@ const ReviewList = ({ productId }: Props) => {
     return <p>No reviews yet.</p>;
   }
 
+  const currentSummary = summary || reviewData?.summary;
+
   return (
     <div>
       <div className="mb-5">
-        {reviewData?.summary ? (
-          <p className="mb-5 italic text-gray-600">{reviewData.summary}</p>
+        {currentSummary ? (
+          <p className="mb-5 italic text-gray-600">{currentSummary}</p>
         ) : (
-          <Button>
+          <Button onClick={handleSummarize}>
             <HiSparkles /> Summarize
           </Button>
         )}
